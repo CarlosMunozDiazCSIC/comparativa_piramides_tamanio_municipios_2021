@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Comparativa de pirámides de población - Padrón 2021</title>
+    <link href="./css/reset.css" rel="stylesheet">
+    <link href="./css/main.css" rel="stylesheet">
+</head>
+<body>
+    <section class="content">
+        <div class="title">
+            <h1>Comparativa de pirámides de población por tamaño del municipio</h1>
+            <p>Este desarrollo permite la comparación de pirámides de población en función del tamaño del municipio. El elemento comparativo es opcional, pero el elemento principal es obligatorio. Si no se indica nada, se visualiza la pirámide a nivel nacional por defecto.</p>
+        </div>
+        <div class="logic">
+            <div class="logic__first">
+                <h3>Seleccione el elemento principal a visualizar</h3>
+                <input list="municipiosFirst" id="listMunicipiosFirst" placeholder="Ej: Más de 500.000 habitantes">
+                <datalist id="municipiosFirst">
+    
+                </datalist>
+            </div>
+            <div class="logic__comparative">
+                <h3>Seleccione el elemento comparativo (opcional)</h3>
+                <input list="municipiosSecond" id="listMunicipiosSecond" placeholder="Ej: Menos de 2.000 habitantes">
+                <datalist id="municipiosSecond">
+                    
+                </datalist>
+            </div>
+        </div>
+        <div class="b-chart">
+            <div class="legend">
+                <span>Hombres</span>
+                <span>Mujeres</span>
+            </div>
+            <div class="chart" id="chart">
+        </div>
+        
+        </div>
+    </section>
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="./main.js"></script>
+</body>
+</html>
