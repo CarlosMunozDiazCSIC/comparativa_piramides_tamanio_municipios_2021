@@ -70,21 +70,14 @@ function initData() {
             }
 
             function initPyramid(first) {
-                let auxFirst = [], auxFirstMen = [], auxFirstWomen = [];
+                let auxFirst = [];
 
                 //Desarrollo de la pirámide principal
                 //Filtrado de datos
                 auxFirst = dataPyramid.filter(function(item) {
                     if(item.key == first) { return item; }
                 })[0];
-
-                //Separación para hombres y mujeres
-                auxFirstMen = auxFirst.values.filter(function(item) {
-                    if(item.sexo == 'Hombres') { return item; }
-                });
-                auxFirstWomen = auxFirst.values.filter(function(item) {
-                    if(item.sexo == 'Mujeres') { return item; }
-                });
+                auxFirst = auxFirst.values;
 
                 //Visualización                
                 svg = d3.select("#chart")
@@ -101,47 +94,47 @@ function initData() {
                 gLabels = svg.append("g").attr("transform", "translate(" + (margin.left + (w - centreSpacing) / 2 + "," + margin.top + ")") );
 
                 //Escalas
-                y = d3.scaleBand().domain(auxFirstMen.map((d) => d.Edad)).range([h, 0]).padding(0.1);
-                x = d3.scaleLinear().domain([0, 20]).range([0, (w - centreSpacing) / 2]); //Mujeres
-                xReverse = d3.scaleLinear().domain([20, 0]).range([0, (w - centreSpacing) / 2]); //Hombres
+                y = d3.scaleBand().domain(auxFirst.map((d) => d.Edad)).range([h, 0]).padding(0.1);
+                x = d3.scaleLinear().domain([0, 6]).range([0, (w - centreSpacing) / 2]); //Mujeres
+                xReverse = d3.scaleLinear().domain([6, 0]).range([0, (w - centreSpacing) / 2]); //Hombres
 
                 //Hombres
                 gM.selectAll("rect")
-                    .data(auxFirstMen)
+                    .data(auxFirst)
                     .enter()
                     .append("rect")
                     .attr('class', 'rect-first-men')
-                    .attr("x", (d) => (w - centreSpacing) / 2 - x(+d.porc_grupo))
+                    .attr("x", (d) => (w - centreSpacing) / 2 - x(+d.porc_hombres))
                     .attr("y", (d) => y(d.Edad))
                     .attr("height", y.bandwidth())
-                    .attr("width", (d) => x(+d.porc_grupo))
+                    .attr("width", (d) => x(+d.porc_hombres))
                     .style("fill", "#4e7e7e")
                     .style("opacity", 0.75);
 
                 //Mujeres
                 gF.selectAll("rect")
-                    .data(auxFirstWomen)
+                    .data(auxFirst)
                     .enter()
                     .append("rect")
                     .attr('class', 'rect-first-women')
                     .attr("x", 0)
                     .attr("y", (d) => y(d.Edad))
                     .attr("height", y.bandwidth())
-                    .attr("width", (d) => x(+d.porc_grupo))
+                    .attr("width", (d) => x(+d.porc_mujeres))
                     .style("fill", "#4e7e7e")
                     .style("opacity", 0.75);
 
                 //Labels centrales
                 gLabels
                     .selectAll("text")
-                    .data(auxFirstMen)
+                    .data(auxFirst)
                     .enter()
                     .append("text")
                     .attr('text-anchor', 'middle')
                     .attr("x", (centreSpacing / 2))
                     .attr("y", (d) => y(d.Edad) + 13.5)
                     .text(function(d, i) {
-                        if(i == auxFirstMen.length - 1) {
+                        if(i == auxFirst.length - 1) {
                             return '100+';
                         } else {
                             if(i == 0) {
@@ -170,47 +163,37 @@ function initData() {
             }
 
             function setPyramid(first, second) {
-                console.log(first,second);
-                let auxFirst = [], auxFirstMen = [], auxFirstWomen = [], auxSecond = [], auxSecondMen = [], auxSecondWomen = [];
+                let auxFirst = [], auxSecond = [];
 
                 //Desarrollo de la pirámide principal
                 //Filtrado de datos
                 auxFirst = dataPyramid.filter(function(item) {
                     if(item.key == first) { return item; }
                 })[0];
-
-                //Separación para hombres y mujeres
-                auxFirstMen = auxFirst.values.filter(function(item) {
-                    if(item.sexo == 'Hombres') { return item; }
-                });
-                auxFirstWomen = auxFirst.values.filter(function(item) {
-                    if(item.sexo == 'Mujeres') { return item; }
-                });
-
-                console.log(auxFirstMen);
+                auxFirst = auxFirst.values;
 
                 //Visualización principal
                 //Hombres
                 gM.selectAll(".rect-first-men")
-                    .data(auxFirstMen)
+                    .data(auxFirst)
                     .transition()
                     .duration(1500)
-                    .attr("x", (d) => (w - centreSpacing) / 2 - x(+d.porc_grupo))
+                    .attr("x", (d) => (w - centreSpacing) / 2 - x(+d.porc_hombres))
                     //.attr("y", (d) => y(d.Edad))
                     //.attr("height", y.bandwidth())
-                    .attr("width", (d) => x(+d.porc_grupo))
+                    .attr("width", (d) => x(+d.porc_hombres))
                     .style("fill", "#4e7e7e")
                     .style("opacity", 0.75);
 
                 //Mujeres
                 gF.selectAll(".rect-first-women")
-                    .data(auxFirstWomen)
+                    .data(auxFirst)
                     .transition()
                     .duration(1500)
                     .attr("x", 0)
                     //.attr("y", (d) => y(d.Edad))
                     //.attr("height", y.bandwidth())
-                    .attr("width", (d) => x(+d.porc_grupo))
+                    .attr("width", (d) => x(+d.porc_mujeres))
                     .style("fill", "#4e7e7e")
                     .style("opacity", 0.75);
 
@@ -221,24 +204,15 @@ function initData() {
                     auxSecond = dataPyramid.filter(function(item) {
                         if(item.key == second) { return item; }
                     })[0];
-
-                    //Separación para hombres y mujeres
-                    auxSecondMen = auxSecond.values.filter(function(item) {
-                        if(item.sexo == 'Hombres') { return item; }
-                    });
-                    auxSecondWomen = auxSecond.values.filter(function(item) {
-                        if(item.sexo == 'Mujeres') { return item; }
-                    });
-
-                    console.log(auxSecondMen);
+                    auxSecond = auxSecond.values;
 
                     if(isSecondSet) {
                         //Hombres
                         gM2.selectAll(".rect-second-men")
-                            .data(auxSecondMen)
+                            .data(auxSecond)
                             .transition()
                             .duration(1500)
-                            .attr("x", (d) => (w - centreSpacing) / 2 - x(+d.porc_grupo))
+                            .attr("x", (d) => (w - centreSpacing) / 2 - x(+d.porc_hombres))
                             //.attr("y", (d) => y(d.Edad))
                             //.attr("height", y.bandwidth())
                             .attr("width", '1.5px')
@@ -246,10 +220,10 @@ function initData() {
 
                         //Mujeres
                         gF2.selectAll(".rect-second-women")
-                            .data(auxSecondWomen)
+                            .data(auxSecond)
                             .transition()
                             .duration(1500)
-                            .attr("x", (d) => x(+d.porc_grupo))
+                            .attr("x", (d) => x(+d.porc_mujeres))
                             //.attr("y", (d) => y(d.Edad))
                             //.attr("height", y.bandwidth())
                             .attr("width", '1.5px')
@@ -261,11 +235,11 @@ function initData() {
 
                         //Hombres
                         gM2.selectAll("rect")
-                            .data(auxSecondMen)
+                            .data(auxSecond)
                             .enter()
                             .append("rect")
                             .attr('class', 'rect-second-men')
-                            .attr("x", (d) => (w - centreSpacing) / 2 - x(+d.porc_grupo))
+                            .attr("x", (d) => (w - centreSpacing) / 2 - x(+d.porc_hombres))
                             .attr("y", (d) => y(d.Edad))
                             .attr("height", y.bandwidth())
                             .attr("width", '1.5px')
@@ -273,11 +247,11 @@ function initData() {
 
                         //Mujeres
                         gF2.selectAll("rect")
-                            .data(auxSecondWomen)
+                            .data(auxSecond)
                             .enter()
                             .append("rect")
                             .attr('class', 'rect-second-women')
-                            .attr("x", (d) => x(+d.porc_grupo))
+                            .attr("x", (d) => x(+d.porc_mujeres))
                             .attr("y", (d) => y(d.Edad))
                             .attr("height", y.bandwidth())
                             .attr("width", '1.5px')
@@ -285,9 +259,7 @@ function initData() {
 
                         //Solo entra una primera vez aquí
                         isSecondSet = true;
-                    }
-
-                    
+                    }                    
                 }
             }
         });
